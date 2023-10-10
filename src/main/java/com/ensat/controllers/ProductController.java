@@ -1,18 +1,11 @@
 package com.ensat.controllers;
 
 import com.ensat.entities.Product;
+import com.ensat.entities.ProductBuilder;
 import com.ensat.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-
-
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -20,10 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
  */
 @RestController("/products")
 public class ProductController {
-     @Autowired
-     private ProductService productService;
+    @Autowired
+    private ProductService productService;
 
-   
 
     /**
      * List all products.
@@ -31,7 +23,7 @@ public class ProductController {
      * @param model
      * @return
      */
-   @GetMapping("/")
+    @GetMapping("/")
     public String list(Model model) {
         model.addAttribute("products", productService.listAllProducts());
         System.out.println("Returning products:");
@@ -93,5 +85,12 @@ public class ProductController {
         productService.deleteProduct(id);
         return "redirect:/products";
     }
+
+    @RequestMapping(value = "product", method = RequestMethod.PATCH)
+    public String patchProduct(Product product) {
+        productService.updateProduct(product);
+        return "redirect:/product/" + product.getId();
+    }
+
 
 }
